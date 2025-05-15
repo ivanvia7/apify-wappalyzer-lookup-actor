@@ -11,12 +11,12 @@ export const router = createPlaywrightRouter();
 router.addDefaultHandler(async ({ request, log, page }) => {
     //navigation to the page
     log.info(`🏃Going to the target page: ${request.url}`);
-    log.info("⏰ Waiting 15 seconds for the page to load");
+    // log.info("⏰ Waiting 15 seconds for the page to load");
 
     await page.waitForTimeout(15000);
 
-    log.info("🔁 Reload in progress");
-    await page.reload({ timeout: 120_000, waitUntil: 'load' })
+    // log.info("🔁 Reload in progress");
+    await page.reload({ timeout: 120_000, waitUntil: 'domcontentloaded' })
 
     await page.waitForTimeout(30000);
 
@@ -52,7 +52,5 @@ router.addDefaultHandler(async ({ request, log, page }) => {
     htmlCollector["techContainerHtml"] = techContainer;
     htmlCollector["infoContainerHtml"] = infoContainer;
 
-    console.log(infoContainer);
-
-    log.info("📍Finished inside the route. Proceeding with parsing the data.");
+    // log.info("📍Finished inside the route. Proceeding with parsing the data.");
 });
