@@ -9,7 +9,7 @@ export function parseTechnologyContainer(
         return {};
     }
 
-    log.info("⚙️ Processing technology container with Cheerio...");
+    // log.info("⚙️ Processing technology container with Cheerio...");
 
     const $ = load(technologyHtml);
 
@@ -78,7 +78,7 @@ export function parserInfoContainer(infoHtml: string) {
         return {};
     }
 
-    log.info("⚙️ Processing info container with Cheerio...");
+    // log.info("⚙️ Processing info container with Cheerio...");
 
     const $ = load(infoHtml);
 
