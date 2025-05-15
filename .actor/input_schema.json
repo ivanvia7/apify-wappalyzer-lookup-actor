@@ -1,0 +1,14 @@
+{
+    "title": "Wappalyzer-lookup-scraper",
+    "type": "object",
+    "schemaVersion": 1,
+    "properties": {
+        "startUrls": {
+            "title": "Target business URLs",
+            "type": "array",
+            "description": "Websites of the businesses where you would like to find technical details.",
+            "editor": "requestListSources",
+            "prefill": [{ "url": "https://apify.com/" }]
+        }
+    }
+}
