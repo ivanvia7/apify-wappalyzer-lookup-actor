@@ -16,7 +16,7 @@ router.addDefaultHandler(async ({ request, log, page }) => {
     await page.waitForTimeout(15000);
 
     log.info("🔁 Reload in progress");
-    await page.reload();
+    await page.reload({ timeout: 120_000, waitUntil: 'load' })
 
     await page.waitForTimeout(30000);
 

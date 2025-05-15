@@ -21,7 +21,8 @@ const { startUrls } = input;
 const fixedStartUrls = prepareAllStartUrls(startUrls);
 
 const proxyConfiguration = await Actor.createProxyConfiguration({
-    groups: ["BUYPROXIES94952"],
+    groups: ["RESIDENTIAL"],
+    countryCode: "US"
 });
 
 const crawler = new PlaywrightCrawler({
