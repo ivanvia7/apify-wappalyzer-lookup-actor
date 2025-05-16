@@ -1,27 +1,23 @@
-import { Actor, Dataset } from "apify";
-import { PlaywrightCrawler } from "crawlee";
+import { Actor, Dataset } from 'apify';
+import { PlaywrightCrawler } from 'crawlee';
+import { firefox } from 'playwright';
 
-import { router, htmlCollector } from "./routes.js";
-import { Input } from "./types.js";
+import { htmlCollector, router } from './routes.js';
+import { Input, CompanyProfileOutput } from './types.js';
 
-import { prepareAllStartUrls } from "./utils.js";
-
-import { parseTechnologyContainer, parserInfoContainer } from "./parsers.js";
+import { prepareAllStartUrls } from './utils.js';
+import { parseTechnologyContainer, parserInfoContainer } from './parsers.js';
 
 await Actor.init();
 
-const input = await Actor.getInput<Input>();
-
-if (!input) {
-    throw new Error("Input is missing.");
-}
+const input = (await Actor.getInput<Input>())!;
 
 const { startUrls } = input;
 
 const fixedStartUrls = prepareAllStartUrls(startUrls);
 
 const proxyConfiguration = await Actor.createProxyConfiguration({
-    groups: ["BUYPROXIES94952"],
+    groups: ['BUYPROXIES94952'],
 });
 
 const crawler = new PlaywrightCrawler({
@@ -29,35 +25,12 @@ const crawler = new PlaywrightCrawler({
     requestHandler: router,
     requestHandlerTimeoutSecs: 360,
     launchContext: {
+        launcher: firefox,
         launchOptions: {
-            args: ["--disable-gpu"],
-            headless: true,
+            args: ['--disable-gpu'],
+            headless: false,
         },
     },
-    // preNavigationHooks: [
-    //     async (crawlingContext) => {
-    //         const { page, request, log } = crawlingContext;
-    //         const mainTargetUrl = request.loadedUrl || request.url;
-
-    //         page.on("console", (msg) => {
-    //             const type = msg.type();
-    //             const text = msg.text();
-    //             if (
-    //                 ["error", "warning", "log", "info", "debug"].includes(type)
-    //             ) {
-    //                 crawlingContext.log.info(
-    //                     `[BROWSER ${type.toUpperCase()}]: ${text}`,
-    //                 );
-    //             }
-    //         });
-    //         page.on("pageerror", (error) => {
-    //             crawlingContext.log.error(
-    //                 `[BROWSER PAGE_ERROR]: ${error.message}`,
-    //                 { stack: error.stack, url: mainTargetUrl },
-    //             );
-    //         });
-    //     },
-    // ],
     useSessionPool: true,
     persistCookiesPerSession: false,
     sessionPoolOptions: {
@@ -75,6 +48,8 @@ const techonologyData = parseTechnologyContainer(
 
 const companyData = parserInfoContainer(htmlCollector.infoContainerHtml);
 
-await Dataset.pushData({ ...companyData, ...techonologyData });
+const combinedData: CompanyProfileOutput = { ...companyData, ...techonologyData };
+
+await Dataset.pushData(combinedData);
 
 await Actor.exit();

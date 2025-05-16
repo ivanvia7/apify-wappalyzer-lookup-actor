@@ -1,10 +1,10 @@
-import { URL_BASE_LOOKUP } from "./consts.js";
-import { TargetWebUrl } from "./types.js";
+import { URL_BASE_LOOKUP } from './consts.js';
+import { TargetWebUrl } from './types.js';
 
 export function createStartUrl(targetWeb: string): string {
     const sanitizedTargetUrl = targetWeb
-        .replace(/^https?:\/\//, "")
-        .split("/")[0];
+        .replace(/^https?:\/\//, '')
+        .split('/')[0];
     return `${URL_BASE_LOOKUP}${sanitizedTargetUrl}`;
 }
 
